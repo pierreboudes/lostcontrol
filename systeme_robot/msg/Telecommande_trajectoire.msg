@@ -1,0 +1,8 @@
+string mode
+float32 vlineaire
+float32 vangulaire
+float32 vitesseRoueG
+float32 vitesseRoueD
+float32 objectifLattitude
+float32 objectifLongitude
+float32 objectifLaltitude

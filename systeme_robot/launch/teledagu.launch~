@@ -1,0 +1,12 @@
+<launch>
+
+  <group ns="dagu">
+    <node pkg="systeme_robot" name="tele" type="telecommande"/>
+    <node pkg="systeme_robot" name="traj" type="trajectoire"/>
+  </group>
+
+  <group ns="turtlesim1">
+    <node pkg="turtlesim" name="sim" type="turtlesim_node"/>
+  </group>
+
+</launch>
