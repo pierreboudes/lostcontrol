@@ -16,17 +16,17 @@ def sendToArduino(data):
 
     message = "HB" # mode commande du pont H, en binaire
     if gauche < 0:
-        message += "A" + "{}".format(chr(-gauche))
+        message += chr(0) + chr(-gauche)
     else:
-        message += "C{}".format(chr(gauche)) 
+        message += chr(2) + chr(gauche)
     if droite < 0:
-        message += "A" + "{}".format(chr(-droite))
+        message += chr(0) + chr(-droite)
     else:
-        message += "C{}".format(chr(droite))
+        message += chr(2) + chr(droite)
     #message += "TT"
     rospy.loginfo(rospy.get_name() + ": prepenvoi arduino {}".format(message))
 #    com.write(message)
-    com.write("HBA~C~")
+#    com.write("HBA~C~")
     rospy.loginfo(rospy.get_name() + ": envoi arduino {}".format(message))
     
 def listener():
