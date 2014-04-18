@@ -75,6 +75,8 @@ void Trajectoire::telecommandeCallback(const systeme_robot::Telecommande_traject
 	  // Copie du message dans la variable correspondante
 	  commandeManuel.vlineaire = msg.vlineaire;
 	  commandeManuel.vangulaire = msg.vangulaire;
+	  commandeManuel.vitesseRoueG = msg.vlineaire;
+	  commandeManuel.vitesseRoueD = msg.vangulaire;
 	  
 	  // L'ordre a transmettre a la tortue a ete genere, on envoie le tout
 	  publisher.publish(ordreTortue);

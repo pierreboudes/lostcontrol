@@ -11,8 +11,8 @@ def sendToArduino(data):
     gauche = int( data.vitesseRoueG )
     droite = int( data.vitesseRoueD )
 
-    gauche = 200
-    droite = -200
+#    gauche = 200
+#    droite = -200
 
     message = "HB" # mode commande du pont H, en binaire
     if gauche < 0:
@@ -23,10 +23,9 @@ def sendToArduino(data):
         message += chr(0) + chr(-droite)
     else:
         message += chr(2) + chr(droite)
-    #message += "TT"
+
     rospy.loginfo(rospy.get_name() + ": prepenvoi arduino {}".format(message))
-#    com.write(message)
-#    com.write("HBA~C~")
+    com.write(message)
     rospy.loginfo(rospy.get_name() + ": envoi arduino {}".format(message))
     
 def listener():

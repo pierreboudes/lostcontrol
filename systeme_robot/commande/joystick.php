@@ -6,7 +6,33 @@
 	</head>
 
 	<body>
+
+	  <?php
+  $x = 0;
+  $y = 0;
+  if(isset($_GET['coordX']) and is_numeric($_GET['coordX'])) {
+      $x = $_GET['coordX'];
+  }
+  if(isset($_GET['coordY']) and is_numeric($_GET['coordY'])) {
+      $y = $_GET['coordY'];
+  }
+ $message = "$x $y\n"; 
+
+			$monfichier = '/var/www/commande.txt';
+			$fp = fopen($monfichier,'w');
+			fputs($fp,$message);
+			fclose($fp);
+                        /* logs */
+			$monfichier = '/var/www/commande.log';
+			$fp = fopen($monfichier,'a');
+			fputs($fp,$message);
+			fclose($fp);
+			header('Location: index.html');
+		
+		?>
+
 		<?php
+/*
 			if(!isset($GET['coordX']))
 			{
 				$test='p';
@@ -44,7 +70,7 @@
 			fputs($fp,$test);
 			fclose($fp);
 			header('Location: index.html');
-		
+		*/
 		?>
 	</body>
 </html>
