@@ -1,0 +1,26 @@
+
+* démarrage rapide
+** mettre en place l'interface reseau wifi
+
+#+BEGIN_SRC sh
+term1$ sudo ifconfig wlan0 down
+term2$ sudo hostapd hostapd.conf
+term1$ sudo ifconfig wlan0 192.168.2.2 netmask 255.255.255.0 up
+#+END_SRC
+
+** configurer le client
+Le nom du wifi est "dagubot" (on peut modifier ce nom dans
+hostapd.conf) et l'IP 192.168.2.3
+
+dans le navigateur du téléphone tactile: http://192.168.2.2/commande/
+
+** allumer le robot.
+juste un switch, vérifier avant les court-circuits.
+
+** lancer le projet ROS
+#+BEGIN_SRC sh
+roscore
+roslaunch systeme_robot outdoor1.launch
+#+END_SRC
+
+** tester

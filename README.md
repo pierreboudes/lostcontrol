@@ -4,25 +4,9 @@ lostcontrol
 outdoor gardener robot
 
 
-Demarrage rapide
-1. mettre en place l'interface reseau wifi
+Démarrage rapide en mode telecommandé (telecommande.org)[telecommande.org]
 
-term1$ sudo ifconfig wlan0 down
-term2$ sudo hostapd hostapd.conf
-term1$ sudo ifconfig wlan0 192.168.2.2 netmask 255.255.255.0 up
 
-2. configurer le client
-wifi "dagubot" (on peut modifier ce nom dans hostapd.conf)
-192.168.2.3
-dans le navigateur:
-http://192.168.2.2/commande/
-
-3. allumer le robot.
-juste un switch, vérifier avant les court-circuits.
-
-4. lancer le projet ROS
-roscore
-roslaunch systeme_robot outdoor1.launch
-
-5. tester
-
+Pour créer votre propre commande (mettons un pilote automatique) :
+- recopier sous un autre nom, disons pilote.cpp, et modifier le fichier (systeme_robot/src/telecommande.cpp)[telecommande.cpp] de façon à émettre votre propre message de commande (deux entiers entre -300 et 300, pour la puissance des moteurs sur chacune des rangées de roues)
+- recopier sous un autre nom et modifier le fichier (systeme_robot/launch/outdoor1.launch)[outdoor1.launch] de façon à lancer le noeud pilote
