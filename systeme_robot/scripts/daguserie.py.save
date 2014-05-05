@@ -4,7 +4,7 @@ import serial
 import time
 
 #nos messages
-from systeme_robot.msg import Autopilote_trajectoire
+from systeme_robot.msg import Telecommande_trajectoire
 
 def sendToArduino(data):    
     rospy.loginfo(rospy.get_name() + ": Recu {}, {}".format(data.vitesseRoueG, data.vitesseRoueD))
@@ -30,7 +30,7 @@ def sendToArduino(data):
     
 def listener():
     rospy.init_node("daguserie", anonymous=True)
-    rospy.Subscriber("autopilote_trajectoire", Autopilote_trajectoire, sendToArduino)
+    rospy.Subscriber("telecommande_trajectoire", Telecommande_trajectoire, sendToArduino)
     rospy.spin()
 
 if __name__ == '__main__':
