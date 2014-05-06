@@ -1,7 +1,7 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 
-#include <turtlesim/Velocity.h>
+#include <geometry_msgs/Twist.h>
 #include <stdlib.h>
 
 #include <string>
@@ -44,7 +44,7 @@ class Trajectoire
 Trajectoire::Trajectoire()
 {
 	ros::NodeHandle n;
-	publisher = n.advertise<turtlesim::Velocity>("turtle1/command_velocity",1000);
+	publisher = n.advertise<geometry_msgs::Twist>("turtle1/cmd_vel",1000);
 	telecommandeSubscribe = n.subscribe("telecommande_trajectoire", 1000, &Trajectoire::telecommandeCallback, this);
 	
 	/* le noeud Trajectoire surveille 2 autres topics : le topic du GPS et le topic de l'Accelerometre
@@ -62,15 +62,15 @@ void Trajectoire::telecommandeCallback(const systeme_robot::Telecommande_traject
 	  /turtle1/command_velocity : Topic pour faire deplacer la tortue.
 	  ordreTortue : message envoyer a la tortue
 	  */
-	  turtlesim::Velocity ordreTortue;
+//	  geometry_msgs::Twist ordreTortue;
 	  
-	  ordreTortue.linear = 0.0;
-	  ordreTortue.angular = 0.0;
+//	  ordreTortue.linear = 0.0;
+//	  ordreTortue.angular = 0.0;
 	  
 	  
 	  // Lecture du message
-	  ordreTortue.linear = msg.vlineaire;
-	  ordreTortue.angular = msg.vangulaire;
+//	  ordreTortue.linear = msg.vlineaire;
+//	  ordreTortue.angular = msg.vangulaire;
 	  
 	  // Copie du message dans la variable correspondante
 	  commandeManuel.vlineaire = msg.vlineaire;
@@ -79,7 +79,7 @@ void Trajectoire::telecommandeCallback(const systeme_robot::Telecommande_traject
 	  commandeManuel.vitesseRoueD = msg.vangulaire;
 	  
 	  // L'ordre a transmettre a la tortue a ete genere, on envoie le tout
-	  publisher.publish(ordreTortue);
+//	  publisher.publish(ordreTortue);
 }
 
 
