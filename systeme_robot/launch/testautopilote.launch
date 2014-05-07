@@ -1,0 +1,7 @@
+<launch>
+
+  <group ns="dagu">
+    <node pkg="systeme_robot" name="auto" type="autopilote"/>
+  </group>
+
+</launch>
