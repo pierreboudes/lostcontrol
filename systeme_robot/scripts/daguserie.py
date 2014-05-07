@@ -11,6 +11,11 @@ def sendToArduino(data):
     gauche = int( data.vitesseRoueG )
     droite = int( data.vitesseRoueD )
 
+    if (abs(gauche)<45):
+        gauche = 0
+
+    if (abs(droite)<45):
+        droite = 0
 #    gauche = 200
 #    droite = -200
 

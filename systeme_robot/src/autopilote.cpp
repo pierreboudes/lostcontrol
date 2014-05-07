@@ -1,3 +1,4 @@
+
 // ajout opencv 
 #include <opencv2/opencv.hpp>
 
@@ -5,6 +6,9 @@
 
 #define MAX_ERRORS 5
 #define MIN_PIX 0
+
+
+#define MAX_SPEED 100
 
 // C920 Logitech
 #define FIELD_VIEW 78
@@ -30,10 +34,10 @@
 #define REFRESH 30
 #define PAUSE_KEY 32
 
-#define HUE_BASE 175
-#define HUE_TOLERANCE 54
-#define SATURATION_BASE 226
-#define SATURATION_TOLERANCE 57
+#define HUE_BASE 180
+#define HUE_TOLERANCE 20
+#define SATURATION_BASE 255
+#define SATURATION_TOLERANCE 59
 #define DILATE_SIZE 2
 #define ERODE_SIZE 7
 
@@ -152,6 +156,7 @@ int main(int argc, char **argv)
 		}
 
 		// Création des fenêtres
+		/*
 		namedWindow("trace", CV_WINDOW_NORMAL);
 		namedWindow("panel", CV_WINDOW_NORMAL);
 		namedWindow("transformed", CV_WINDOW_NORMAL);
@@ -166,9 +171,15 @@ int main(int argc, char **argv)
 		moveWindow("transformed", 520, 550);
 		moveWindow("panel", 0, 410);
 		moveWindow("trace", 520, 0);
-
+		*/
+		
 		// Déclaration des variables utilisées
 		int blur = 1,
+			norma = 1,
+			//hueBase = HUE_BASE,
+			//saturationBase = SATURATION_BASE,
+			//hueTolerance = HUE_TOLERANCE,
+			//saturationTolerance = SATURATION_TOLERANCE,
 			tracer = 1,
 			compteurErreurs = 0,
 			rayon = 0,
@@ -201,9 +212,12 @@ int main(int argc, char **argv)
 		Scalar intensity;
 
 		// Création des barres de sélection	
-		createTrackbar("blur", "panel", &blur, 5);
+		//createTrackbar("hue Base", "panel", &hueBase, 180);
+		/*createTrackbar("hue Tol", "panel", &hueTolerance, 180);
+		createTrackbar("saturation Base", "panel", &saturationBase, 255);
+		createTrackbar("saturation Tol", "panel", &saturationTolerance, 255);
 		createTrackbar("trace", "panel", &tracer, 1);
-		
+		*/
 	while(ros::ok()) {		// boucle principale ros node
 		ros::spinOnce();
 		
@@ -230,7 +244,16 @@ int main(int argc, char **argv)
 				if (blur) {
 					GaussianBlur(frame, frame, Size(9, 9), blur, blur);
 				}
-			
+				
+				// Normalisation
+				if (norma) {
+					cvtColor(frame, frame, CV_BGR2YCrCb);
+					split(frame, channels);
+					equalizeHist(channels[0], channels[1]);
+					merge(channels, frame);
+					cvtColor(frame, frame, CV_YCrCb2BGR);
+				}	
+				
 				// BGR 2 HSV
 				cvtColor(frame, frame2, CV_BGR2HSV);
 		
@@ -264,16 +287,20 @@ int main(int argc, char **argv)
 				  msg.vitesseRoueD = Rd;			       	 
 			
 				publisher.publish(msg);	
-			    
+				
+				char buf[1024];
+				sprintf(buf,"ordre: G:%f D:%f dis:%fcm ang:%f", Rg, Rd, distance, angle);
+				ROS_INFO("%s", buf);
+				WRITE_MYLOG(buf);		    
 				    
 				//Empêcher cercle à 0
-		
+		/*
 				if (rayon<=0){
 					rayon =1;
 				}
-
+*/
 			    // Affichage
-			    if (tracer) {
+			/*    if (tracer) {
 			    
 			        // Fenêtre Base
 			        circle(frame, center, 2, Scalar(0, 255, 0), -1); // centre
@@ -291,7 +318,7 @@ int main(int argc, char **argv)
 			    
 				imshow("base", frame);
 				imshow("transformed", frame2);
-				imshow("trace", trace);
+				imshow("trace", trace);*/
 			}
 	
 			// Rafraîchissement
@@ -308,7 +335,7 @@ int main(int argc, char **argv)
 			}
 			*/
  	} // fin boucle principale noeud ros
-
+	
 	// Libération de mémoire
 	destroyAllWindows();
 	element.release();
@@ -400,12 +427,12 @@ float findDistance(int rayon, int imageH) {
 }
 
 void findVitesses(float distance, float angle, float & Rg, float & Rd){
-
+  angle *= -1;
 	float diff = abs(angle) / 90;
 
 	if (distance < DIST_SECURE_MIN and distance > 0) {
-		Rg = -1;
-		Rd = -1;
+		Rg = 0;
+		Rd = 0;
 		if (angle > 0) { Rg = 0 - diff; }
 		else if (angle < 0) { Rd = 0 - diff; }
 	}
@@ -415,14 +442,14 @@ void findVitesses(float distance, float angle, float & Rg, float & Rd){
 		if (angle > 0) { Rg = 1 - diff; }
 		else if (angle < 0) { Rd = 1 - diff; }
 	}
-	else {
-		if (angle > 0) { Rg = 1; Rd = -1; }
-		else if (angle < 0) { Rg = -1; Rd = 1; }
+	else {/* bonne distance */
+		if (angle > 0.3) { Rg = 0.7; Rd = -0.7; }
+		else if (angle < -0.3) { Rg = -0.7; Rd = 0.7; }
 		else { Rg = 0; Rd = 0; }
 	}
 
-	Rg *= 255;
-	Rd *= 255;
+	Rg *= MAX_SPEED;
+	Rd *= MAX_SPEED;
 }
 
 
