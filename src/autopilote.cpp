@@ -67,6 +67,8 @@
 #define WRITE_MYLOG(x) {fichierlog << (x);}
 #define CLOSE_MYLOG fichierlog.close();
 
+#define MAXIMUM_DEPLACEMENT_POSSIBLE 20
+
 using namespace cv;
 using namespace std;
 
@@ -186,7 +188,8 @@ int main (int argc, char **argv) {
 	    rayon = max(videoWidth, videoHeight);
         
     float angle = 0.0, 
-        distance = 0.0, 
+        distance = 0.0,
+        newDistance = 0.0, 
         Rg = 0.0, 
         Rd = 0.0;
 	
@@ -299,10 +302,16 @@ int main (int argc, char **argv) {
             findObject(contours, center, rayon);
             
             // Calculer angle distance et vitesses
-            angle = findRotation(center.x, FIELD_VIEW, videoWidth);
-            distance = findDistance(rayon, videoHeight);
-            findVitesses(distance, angle, Rg, Rd);
-                
+            newDistance = findDistance(rayon, videoHeight);
+	        angle = findRotation(center.x, FIELD_VIEW, videoWidth);
+            if (abs(distance - newDistance) > MAXIMUM_DEPLACEMENT_POSSIBLE) {
+            	Rg = STOPPER;
+            	Rd = STOPPER;
+            }
+            else {
+            	distance = newDistance;
+	        	findVitesses(distance, angle, Rg, Rd);
+           	}
                 
         	msg.vitesseRoueG = Rg;
             msg.vitesseRoueD = Rd;	
