@@ -1,8 +1,0 @@
-<launch>
-
-  <group ns="dagu">
-    <node pkg="systeme_robot" name="auto" type="autopilote"/>
-    <node pkg="systeme_robot" name="daguserie" type="daguserie.py"/>
-  </group>
-
-</launch>
