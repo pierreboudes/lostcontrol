@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 		}
 
 		// Création des fenêtres
-		/*
+		
 		namedWindow("trace", CV_WINDOW_NORMAL);
 		namedWindow("panel", CV_WINDOW_NORMAL);
 		namedWindow("transformed", CV_WINDOW_NORMAL);
@@ -171,15 +171,15 @@ int main(int argc, char **argv)
 		moveWindow("transformed", 520, 550);
 		moveWindow("panel", 0, 410);
 		moveWindow("trace", 520, 0);
-		*/
+		
 		
 		// Déclaration des variables utilisées
 		int blur = 1,
 			norma = 1,
-			//hueBase = HUE_BASE,
-			//saturationBase = SATURATION_BASE,
-			//hueTolerance = HUE_TOLERANCE,
-			//saturationTolerance = SATURATION_TOLERANCE,
+			hueBase = HUE_BASE,
+			saturationBase = SATURATION_BASE,
+			hueTolerance = HUE_TOLERANCE,
+			saturationTolerance = SATURATION_TOLERANCE,
 			tracer = 1,
 			compteurErreurs = 0,
 			rayon = 0,
@@ -212,12 +212,12 @@ int main(int argc, char **argv)
 		Scalar intensity;
 
 		// Création des barres de sélection	
-		//createTrackbar("hue Base", "panel", &hueBase, 180);
-		/*createTrackbar("hue Tol", "panel", &hueTolerance, 180);
+		createTrackbar("hue Base", "panel", &hueBase, 180);
+		createTrackbar("hue Tol", "panel", &hueTolerance, 180);
 		createTrackbar("saturation Base", "panel", &saturationBase, 255);
 		createTrackbar("saturation Tol", "panel", &saturationTolerance, 255);
 		createTrackbar("trace", "panel", &tracer, 1);
-		*/
+		
 	while(ros::ok()) {		// boucle principale ros node
 		ros::spinOnce();
 		
@@ -294,13 +294,13 @@ int main(int argc, char **argv)
 				WRITE_MYLOG(buf);		    
 				    
 				//Empêcher cercle à 0
-		/*
+		
 				if (rayon<=0){
 					rayon =1;
 				}
-*/
+
 			    // Affichage
-			/*    if (tracer) {
+			    if (tracer) {
 			    
 			        // Fenêtre Base
 			        circle(frame, center, 2, Scalar(0, 255, 0), -1); // centre
@@ -318,11 +318,11 @@ int main(int argc, char **argv)
 			    
 				imshow("base", frame);
 				imshow("transformed", frame2);
-				imshow("trace", trace);*/
+				imshow("trace", trace);
 			}
 	
 			// Rafraîchissement
-			/*			key = waitKey(REFRESH);
+			/*key = waitKey(REFRESH);
 			switch (key) {
 				case PAUSE_KEY :
 					pause = pause ? false : true;
@@ -332,8 +332,8 @@ int main(int argc, char **argv)
 			    default :
 			        continuer = false;
 			        break;
-			}
-			*/
+			}*/
+			
  	} // fin boucle principale noeud ros
 	
 	// Libération de mémoire

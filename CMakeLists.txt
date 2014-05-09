@@ -54,9 +54,10 @@ find_package (OpenCV REQUIRED
 #   Message1.msg
 #   Message2.msg
 # )
+
 add_message_files(
+  DIRECTORY msg
   FILES
-  Telecommande_trajectoire.msg
   Autopilote_trajectoire.msg
   Gps_trajectoire.msg
   Accelerometre_trajectoire.msg
@@ -93,9 +94,9 @@ add_message_files(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS include
 #  LIBRARIES systeme_robot
-  CATKIN_DEPENDS message_runtime roscpp rospy std_msgs 
+  CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
   DEPENDS system_lib
 )
 
