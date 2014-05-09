@@ -56,9 +56,17 @@ find_package (OpenCV REQUIRED
 # )
 
 add_message_files(
-  DIRECTORY msg
   FILES
   Autopilote_trajectoire.msg
+)
+add_message_files(
+  DIRECTORY msg
+  FILES
+  Telecommande_trajectoire.msg
+)
+add_message_files(
+  DIRECTORY msg
+  FILES
   Gps_trajectoire.msg
   Accelerometre_trajectoire.msg
   )
@@ -82,6 +90,7 @@ add_message_files(
  generate_messages(
    DEPENDENCIES
    std_msgs
+   systeme_robot
    )
 
 ###################################
@@ -126,15 +135,15 @@ include_directories(
 
 add_executable(telecommande src/telecommande.cpp)
 target_link_libraries(telecommande ${catkin_LIBRARIES})
-add_dependencies(telecommande system_robot_generate_message_cpp)
+add_dependencies(telecommande systeme_robot_generate_message_cpp)
  
 add_executable(trajectoire src/trajectoire.cpp)
 target_link_libraries(trajectoire ${catkin_LIBRARIES})
-add_dependencies(trajectoire system_robot_generate_message_cpp)
+add_dependencies(trajectoire systeme_robot_generate_message_cpp)
  
 add_executable(autopilote src/autopilote.cpp)
 target_link_libraries(autopilote ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
-add_dependencies(autopilote system_robot_generate_message_cpp)
+add_dependencies(autopilote systeme_robot_generate_message_cpp)
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(systeme_robot_node
