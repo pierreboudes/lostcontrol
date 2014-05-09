@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg message_gen
 ## Generate messages in the 'msg' folder
 
 add_message_files(DIRECTORY msg FILES Telecommande_trajectoire.msg)
+add_message_files(DIRECTORY msg FILES Autopilote_trajectoire.msg)
 
 add_message_files(
    DIRECTORY msg
@@ -53,6 +54,10 @@ add_executable(trajectoire src/trajectoire.cpp)
 target_link_libraries(trajectoire ${catkin_LIBRARIES})
 add_dependencies(trajectoire system_robot_generate_message_cpp)
 
+add_executable(autopilote src/autopilote.cpp)
+target_link_libraries(autopilote ${catkin_LIBRARIES})
+add_dependencies(autopilote system_robot_generate_message_cpp)
+
 
 ## Declare a cpp executable
 # add_executable(telecommande_robot_node src/telecommande_robot_node.cpp)
@@ -68,3 +73,4 @@ add_dependencies(trajectoire system_robot_generate_message_cpp)
 
 install(PROGRAMS scripts/daguserie.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+  
