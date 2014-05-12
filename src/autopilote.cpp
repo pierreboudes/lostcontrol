@@ -13,7 +13,7 @@
 #define SENSOR_W 4.8
 #define SENSOR_H 3.6
 
-#define OBJECT_HEIGHT 30
+#define OBJECT_HEIGHT 7
 
 /*#define REFRESH 30
 #define PAUSE_KEY 32
@@ -66,6 +66,8 @@
 #define START_MYLOG std::ofstream fichierlog("/tmp/monlog", std::ios::out);
 #define WRITE_MYLOG(x) {fichierlog << (x);}
 #define CLOSE_MYLOG fichierlog.close();
+
+#define MAXIMUM_DEPLACEMENT_POSSIBLE 20
 
 using namespace cv;
 using namespace std;
@@ -149,22 +151,22 @@ int main (int argc, char **argv) {
 		//cout << "Problème source\n";
 		return -1;
 	}
-
+	
     // Création des fenêtres
-	/*namedWindow("trace", CV_WINDOW_NORMAL);
-	namedWindow("panel", CV_WINDOW_NORMAL);
+	
+	//namedWindow("panel", CV_WINDOW_NORMAL);
 	namedWindow("transformed", CV_WINDOW_NORMAL);
 	namedWindow("base", CV_WINDOW_NORMAL);
 	
 	resizeWindow("base", 500, 375);
 	resizeWindow("transformed", 500, 375);
-	resizeWindow("panel", 450, 175);
+	//resizeWindow("panel", 450, 175);
 	resizeWindow("trace", 500, 375);
 	
 	moveWindow("base", 0, 0);
 	moveWindow("transformed", 520, 550);
-	moveWindow("panel", 0, 410);
-	moveWindow("trace", 520, 0);*/
+	//moveWindow("panel", 0, 410);
+	moveWindow("trace", 520, 0);
 	
 	// Déclaration des variables utilisées
 	int blur = 1,
@@ -186,7 +188,9 @@ int main (int argc, char **argv) {
 	    rayon = max(videoWidth, videoHeight);
         
     float angle = 0.0, 
-        distance = 0.0, 
+    	newAngle = 0.0,
+        distance = 0.0,
+        newDistance = 0.0, 
         Rg = 0.0, 
         Rd = 0.0;
 	
@@ -219,8 +223,8 @@ int main (int argc, char **argv) {
 	createTrackbar("hue tolerance", "panel", &hueCustom, 100);
 	createTrackbar("saturation tolerance", "panel", &saturationCustom, 100);
 	createTrackbar("norma", "panel", &norma, 1);
-	createTrackbar("Inverse Red Range", "panel", &inverseRed, 1);
-	*/
+	createTrackbar("Inverse Red Range", "panel", &inverseRed, 1);*/
+	
 	
 	
 		while(ros::ok()) {	// boucle principale ros node
@@ -299,18 +303,27 @@ int main (int argc, char **argv) {
             findObject(contours, center, rayon);
             
             // Calculer angle distance et vitesses
-            angle = findRotation(center.x, FIELD_VIEW, videoWidth);
-            distance = findDistance(rayon, videoHeight);
-            findVitesses(distance, angle, Rg, Rd);
-                
+            newDistance = findDistance(rayon, videoHeight);
+	        newAngle = findRotation(center.x, FIELD_VIEW, videoWidth);
+	        // Amelioration de comportement quand detection defaillante
+            if (abs(distance - newDistance) > MAXIMUM_DEPLACEMENT_POSSIBLE) {
+            	Rg = STOPPER;
+            	Rd = STOPPER;
+            }
+            else {
+            	distance = newDistance;
+            	angle = newAngle;
+	        	findVitesses(distance, angle, Rg, Rd);
+           	}
                 
         	msg.vitesseRoueG = Rg;
             msg.vitesseRoueD = Rd;	
 
             publisher.publish(msg);	
-
+			
+			
             char buf[1024];
-            sprintf(buf,"ordre: G:%f D:%f dis:%fcm ang:%f", Rg, Rd, distance, angle);
+            sprintf(buf,"ordre: G:%f D:%f dis:%fcm ang:%f\n", Rg, Rd, distance, angle);
             ROS_INFO("%s", buf);
             WRITE_MYLOG(buf);	    
             
@@ -323,7 +336,7 @@ int main (int argc, char **argv) {
                     << "A = " << angle << "°            "
                     << "D = " << distance << "cm" << endl;
             }
-            
+            */
             if (rayon <= 0) { rayon = 1; }
             
             // Affichage
@@ -349,7 +362,7 @@ int main (int argc, char **argv) {
 		}
 		
 		// Rafraîchissement
-		key = waitKey(REFRESH);
+		/*key = waitKey(REFRESH);
 		switch (key) {
 		    case PAUSE_KEY :
 		        pause = pause ? false : true;
@@ -357,12 +370,12 @@ int main (int argc, char **argv) {
             case EXIT_KEY :
                 continuer = false;
                 break;
-		}
-		*/
+		}*/
 		
+		waitKey(1);	
 	}
 
-		}
+		
     // Libération de mémoire
 	destroyAllWindows();
 	element.release();
